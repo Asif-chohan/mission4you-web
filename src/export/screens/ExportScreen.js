@@ -114,7 +114,9 @@ const playCards = async (result) => {
         let stuffingPeriod = dayjs(pCard.stuffingPeriod?.toDate()).format(
           "DD.MM.YYYY"
         );
-        let doneAt = dayjs(pCard.doneAt?.toDate()).format("DD.MM.YYYY");
+        let doneAt = pCard.doneAt
+          ? dayjs(pCard.doneAt?.toDate()).format("DD.MM.YYYY")
+          : "";
 
         let channels = pCard.channels?.join(", ");
         let players = playerNames?.join(", ");
