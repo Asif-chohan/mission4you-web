@@ -168,7 +168,9 @@ const cards = async (result) => {
         notification &&
           notification.map((item, i) => {
             let txt = `${item} Notify After`;
+            let txt2 = `${item} Notify AfterLink`;
             notify[txt] = card.notifications[item]?.daysAfter;
+            notify[txt2] = card.notifications[item]?.link;
           });
         let obj = {
           ...card,
