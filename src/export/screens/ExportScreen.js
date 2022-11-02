@@ -121,14 +121,14 @@ const playCards = async (result) => {
         let channels = pCard.channels?.join(", ");
         let players = playerNames?.join(", ");
         let messengerGroup = card?.whatsappgroup || "";
-        let notifyArr = Object.keys(pCard.notifyAfter || {});
+        let notifyArr = Object.keys(pCard.notifications || {}).sort((a, b) => new Date(pCard.notifications[a]) - new Date(pCard.notifications[b]));
 
         let notify = {};
         notifyArr &&
           notifyArr.map((item, i) => {
             let txt = `${item} Notification`;
             let data = `${item} Notification Link`;
-            notify[txt] = dayjs(pCard.notifyAfter[item]?.toDate()).format(
+            notify[txt] = dayjs(pCard.notifications[item]?.toDate()).format(
               "DD.MM.YYYY"
             );
             notify[data] = card.notifications[item]?.link || "";
@@ -148,7 +148,7 @@ const playCards = async (result) => {
           messengerGroup: messengerGroup,
           ...notify,
         };
-        delete obj['notifyAfter'];
+        delete obj['notifications'];
         return obj;
       })
     );
@@ -165,12 +165,14 @@ const cards = async (result) => {
   try {
     let dataArr = await Promise.all(
       result.map(async (card, i) => {
-        let notification = Object.keys(card?.notifications || {});
+        let notification = Object.keys(card?.notifications || {}).sort((a, b) => card.notifications[a].daysAfter - card.notifications[b].daysAfter);
         let notify = {};
         notification &&
           notification.map((item, i) => {
             let txt = `${item} Notify After`;
+            let txt2 = `${item} Notify AfterLink`;
             notify[txt] = card.notifications[item]?.daysAfter;
+            notify[txt2] = card.notifications[item]?.link;
           });
         let obj = {
           ...card,
